@@ -1,43 +1,64 @@
 
-public class GumballMachine
+public class GumballMachine 
 {
-
     private int num_gumballs;
-    private boolean has_quarter;
+    private int gumball_price;
+    private int totalPaid;
+    private int totalReturn;
 
-    public GumballMachine( int size )
+    public GumballMachine( int size, int price )
     {
-        // initialise instance variables
+        // Initialize instance variables
         this.num_gumballs = size;
-        this.has_quarter = false;
+        this.gumball_price = price;
+        ResetValues();
+    }
+    
+    private void ResetValues()
+    {
+    	this.totalPaid = 0;
+    	this.totalReturn = 0;
     }
 
-    public void insertQuarter(int coin)
+    public void ProcessPayment(int amount)
     {
-        if ( coin == 25 )
-            this.has_quarter = true ;
-        else 
-            this.has_quarter = false ;
-    }
+    	//Accepted coins
+    	if(amount != 5 && amount != 10 && amount != 25)
+    	{
+    		ResetValues();
+    		System.out.println("Invalid coin");
+    	}
+    	else
+    	{
+    		this.totalPaid += amount;
+    	}
+    }    
     
     public void turnCrank()
     {
-    	if ( this.has_quarter )
+    	if ( this.totalPaid >= this.gumball_price )
     	{
     		if ( this.num_gumballs > 0 )
     		{
     			this.num_gumballs-- ;
-    			this.has_quarter = false ;
-    			System.out.println( "Thanks for your quarter.  Gumball Ejected!" ) ;
+    			this.totalReturn = this.totalPaid - this.gumball_price;
+    			this.totalPaid = 0;
+    			System.out.println( "Thanks for your payment.  Gumball Ejected!" ) ;
+    			if(this.totalReturn > 0)
+    			{
+    				System.out.println("Please take your change of " + this.totalReturn);
+    				this.totalReturn = 0;
+    			}
     		}
     		else
     		{
-    			System.out.println( "No More Gumballs!  Sorry, can't return your quarter." ) ;
+    			System.out.println( "Sorry, No More Gumballs!  Please take your coins in amount of " + this.totalPaid) ;
+    			ResetValues();
     		}
     	}
     	else 
     	{
-    		System.out.println( "Please insert a quarter" ) ;
+    		System.out.println( "Please insert more coins" ) ;
     	}        
     }
 }
